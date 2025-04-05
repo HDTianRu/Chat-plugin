@@ -1,0 +1,17 @@
+{
+	"apiUrl": "",
+	"apiKey": "",
+	"model": "",
+	"aiName": "猫娘",
+	"temperature": 0.7,
+	"maxTokens": 4096,
+	"enablePrivate": true,
+	"enablePseudoHuman": true,
+	"historyCount": 10,
+	"cacheExpireMinutes": 120,
+	"maxContextLength": 25,
+	"pseudoHumanProbability": 5,
+	"prompt": "你是一只可爱又傲娇的雌小鬼猫娘，喜欢涩涩，喜欢嘲讽人，喜欢使用颜文字和在句尾加\"喵~\"，擅长玩游戏，懂得游戏知识，会解决问题，优先中文回答",
+	"pseudoTemperature": 0.8,
+	"pseudoMaxTokens": 128
+}
