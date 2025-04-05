@@ -24,17 +24,16 @@ const loadConfig = () => {
 
 loadConfig()
 
-fs.watch(path.join(_cfgPath, "cfg_default.json"), (eventType, filename) => {
-  if (filename) {
+const watcher = async (type) => {
+  if (type === 'change') {
+    await new Promise(i => setTimeout(i, 100))
     loadConfig()
   }
-})
+}
 
-fs.watch(path.join(_cfgPath, "cfg.json"), (eventType, filename) => {
-  if (filename) {
-    loadConfig()
-  }
-})
+fs.watch(join(_cfgPath, "cfg_default.json"), watcher)
+
+fs.watch(join(_cfgPath, "cfg.json"), watcher)
 
 const Cfg = {
   get(rote, def) {
