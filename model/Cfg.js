@@ -1,20 +1,22 @@
 import fs from "fs"
 import lodash from "lodash"
-import path from "path"
+import {
+  join
+} from "path"
 import {
   pluginRoot
 } from "../config/constant.js"
 
-const _cfgPath = path.join(pluginRoot, "data")
+const _cfgPath = join(pluginRoot, "data")
 let cfg = {}
 
 const loadConfig = () => {
   let defCfg = {}
   let userCfg = {}
   try {
-    defCfg = JSON.parse(fs.readFileSync(path.join(_cfgPath, "cfg_default.json"), "utf8")) || {}
-    if (fs.existsSync(path.join(_cfgPath, "cfg.json"))) {
-      userCfg = JSON.parse(fs.readFileSync(path.join(_cfgPath, "cfg.json"), "utf8")) || {}
+    defCfg = JSON.parse(fs.readFileSync(join(_cfgPath, "cfg_default.json"), "utf8")) || {}
+    if (fs.existsSync(join(_cfgPath, "cfg.json"))) {
+      userCfg = JSON.parse(fs.readFileSync(join(_cfgPath, "cfg.json"), "utf8")) || {}
     }
   } catch (e) {
     console.warn("读取配置文件失败", e)
@@ -43,7 +45,7 @@ const Cfg = {
   },
   save() {
     try {
-      fs.writeFileSync(path.join(_cfgPath, "cfg.json"), JSON.stringify(cfg, null, "\t"))
+      fs.writeFileSync(join(_cfgPath, "cfg.json"), JSON.stringify(cfg, null, "\t"))
     } catch (e) {
       console.warn("保存配置文件失败", e)
     }
