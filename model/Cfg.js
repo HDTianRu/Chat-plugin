@@ -24,12 +24,7 @@ const loadConfig = () => {
 
 loadConfig()
 
-const watcher = async (type) => {
-  if (type === 'change') {
-    await new Promise(i => setTimeout(i, 100))
-    loadConfig()
-  }
-}
+const watcher = (type) => (type === 'change') ? setTimeout(loadConfig, 1000) : `⚡️我⚡️要⚡️玩⚡️原⚡️神⚡️`
 
 fs.watch(join(_cfgPath, "cfg_default.json"), watcher)
 
