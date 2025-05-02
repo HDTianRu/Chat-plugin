@@ -1,11 +1,10 @@
 # Chat-plugin
 
 ## 介绍
-**一个由AI写的AI插件 ）**
+**一个由AI写的AI插件：）**
 
 ### 特点
-***缺点: 配置简单，功能少***  
-***优点: 配置简单，功能少***
+一款使用OpenAI接口的AI伪人聊天插件，功能配置简洁，使用[锅巴插件](https://gitee.com/guoba-yunzai/guoba-plugin)配置
 
 ## 安装
 ```shell
