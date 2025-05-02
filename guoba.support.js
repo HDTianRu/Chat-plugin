@@ -48,17 +48,20 @@ export function supportGuoba() {
         },
         ...basicCfg(),
         {
-          field: 'groups',
+          field: 'special',
           label: 'BOT:群聊特定配置',
           bottomHelpMessage: '为特定BOT/群聊设置独立的配置参数，格式为 BOT账号:群号 ，如只指定一项，另一项则用 * 代替，比如: 3291691454:* ，优先级: BOT:群 > *:群 > BOT:* > 通用配置',
           component: 'GSubForm',
           componentProps: {
-            addable: true,
-            removable: true,
-            keyField: 'groupId',
-            keyLabel: '群号',
-            keyPlaceholder: '请输入群号',
-            formItems: basicCfg()
+            multiple: true,
+            schemas: [{
+                field: 'key',
+                label: 'BOT:群号',
+                component: "Input",
+                required: true
+              },
+              ...basicCfg()
+            ],
           }
         },
 
