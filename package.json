@@ -11,6 +11,7 @@
   "author": "HDTianRu",
   "license": "ISC",
   "dependencies": {
-    "openai": "^4.83.0"
+    "openai": "^4.83.0",
+    "lodash": "*"
   }
 }

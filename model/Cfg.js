@@ -22,19 +22,32 @@ const loadConfig = () => {
     console.warn("读取配置文件失败", e)
   }
   cfg = lodash.merge({}, defCfg, userCfg)
+  if (cfg.special?.[0]) {
+    cfg.special = Object.fromEntries(
+      cfg.special.map(({
+        key,
+        ...rest
+      }) => [key, rest])
+    )
+  }
 }
 
 loadConfig()
 
-const watcher = (type) => (type === 'change') ? setTimeout(loadConfig, 1000) : `⚡️我⚡️要⚡️玩⚡️原⚡️神⚡️`
+const watcher = (type) => (type === 'change') ? setTimeout(loadConfig, 1000) : null
 
 fs.watch(join(_cfgPath, "cfg_default.json"), watcher)
 
 fs.watch(join(_cfgPath, "cfg.json"), watcher)
 
 const Cfg = {
-  get(rote, def) {
-    return lodash.get(cfg, rote, def)
+  get(rote, def, e) {
+    if (!e.?group_id || !cfg.special) return lodash.get(cfg, rote, def)
+    const special = lodash.get(cfg, `special.${e.self_id}:${e.group_id}`)
+      ?? lodash.get(cfg, `special.*:${e.group_id}`)
+      ?? lodash.get(cfg, `special.${e.self_id}:*`)
+      ?? {}
+    return lodash.get(special, rote) ?? lodash.get(cfg, rote, def)
   },
   set(rote, val) {
     Cfg._set(rote, val)
