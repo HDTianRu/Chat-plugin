@@ -12,7 +12,7 @@ export function supportGuoba() {
       isV2: false,
       description: '简洁的AI聊天插件',
       icon: 'mdi:cat',
-      iconColor: '#f77fbe',
+      iconColor: '#6bb9dd',
     },
     configInfo: {
       schemas: [{
@@ -46,109 +46,19 @@ export function supportGuoba() {
           label: '基本配置',
           component: 'SOFT_GROUP_BEGIN'
         },
+        ...basicCfg(),
         {
-          field: 'aiName',
-          label: 'AI 名称',
-          bottomHelpMessage: '提到此名称会触发 AI 回复',
-          component: "Input",
+          field: 'groups',
+          label: 'BOT:群聊特定配置',
+          bottomHelpMessage: '为特定BOT/群聊设置独立的配置参数，格式为 BOT账号:群号 ，如只指定一项，另一项则用 * 代替，比如: 3291691454:* ，优先级: BOT:群 > *:群 > BOT:* > 通用配置',
+          component: 'GSubForm',
           componentProps: {
-            placeholder: "猫娘"
-          }
-        }, {
-          field: 'temperature',
-          label: '温度设置 (主动)',
-          bottomHelpMessage: '控制主动回复的随机性 (0.1 ~ 2.0)',
-          component: "InputNumber",
-          componentProps: {
-            min: 0.1,
-            max: 2,
-            step: 0.1,
-            placeholder: "0.7"
-          }
-        }, {
-          field: 'maxTokens',
-          label: '最大Token数 (主动)',
-          bottomHelpMessage: '控制主动回复的最大长度',
-          component: "InputNumber",
-          componentProps: {
-            min: 100,
-            max: 32768,
-            placeholder: "4096"
-          }
-        }, {
-          field: 'prompt',
-          label: 'Prompt 设置',
-          bottomHelpMessage: '系统 Prompt 设置，定义 AI 的行为和角色',
-          component: "InputTextArea",
-          componentProps: {
-            placeholder: "你是一个猫娘..."
-          }
-        }, {
-          field: 'enableName',
-          label: '启用名字触发',
-          bottomHelpMessage: '检测消息包含ai名字则回复',
-          component: "Switch"
-        }, {
-          field: 'enableAt',
-          label: '启用艾特回复',
-          bottomHelpMessage: '是否在被艾特时回复',
-          component: "Switch"
-        }, {
-          field: 'enablePrivate',
-          label: '启用私聊',
-          bottomHelpMessage: '是否允许在私聊中使用',
-          component: "Switch"
-        }, {
-          field: 'historyCount',
-          label: '聊天记录条数',
-          bottomHelpMessage: '对话时附加的最近聊天记录条数 (0 ~ 50)',
-          component: "InputNumber",
-          componentProps: {
-            min: 0,
-            max: 50,
-            placeholder: "10"
-          }
-        }, {
-          field: 'cacheExpireMinutes',
-          label: '缓存过期时间(分钟)',
-          bottomHelpMessage: '对话缓存过期时间 (1 ~ 1440)',
-          component: "InputNumber",
-          componentProps: {
-            min: 1,
-            max: 1440,
-            placeholder: "30"
-          }
-        }, {
-          field: 'maxContextLength',
-          label: '最大上下文长度',
-          bottomHelpMessage: '缓存中最多保留的对话消息数量 (1 ~ 50)',
-          component: "InputNumber",
-          componentProps: {
-            min: 1,
-            max: 50,
-            placeholder: "10"
-          }
-        },
-        {
-          field: "botWhitelistQQ",
-          label: "机器人QQ白名单",
-          bottomHelpMessage: "只有这些QQ号的机器人才会响应消息, 留空则不启用白名单",
-          component: "GTags",
-          componentProps: {
-            allowAdd: true,
-            allowDel: true,
-            valueFormatter: ((value) => Number.parseInt(value)).toString()
-          }
-        },
-        {
-          field: "botBlacklistQQ",
-          label: "机器人QQ黑名单",
-          bottomHelpMessage: "这些QQ号的机器人不会响应消息, 白名单优先",
-          component: "GTags",
-          componentProps: {
-            allowAdd: true,
-            allowDel: true,
-            valueFormatter: ((value) => Number.parseInt(value)).toString()
+            addable: true,
+            removable: true,
+            keyField: 'groupId',
+            keyLabel: '群号',
+            keyPlaceholder: '请输入群号',
+            formItems: basicCfg()
           }
         },
 
@@ -195,10 +105,32 @@ export function supportGuoba() {
           }
         },
 
-        /*{
-          label: '伪人黑白名单',
+        {
+          label: '黑白名单设置',
           component: 'SOFT_GROUP_BEGIN'
-        },*/
+        },
+        {
+          field: "botWhitelistQQ",
+          label: "机器人QQ白名单",
+          bottomHelpMessage: "只有这些QQ号的机器人才会使用AI响应消息, 留空则不启用白名单",
+          component: "GTags",
+          componentProps: {
+            allowAdd: true,
+            allowDel: true,
+            valueFormatter: ((value) => Number.parseInt(value)).toString()
+          }
+        },
+        {
+          field: "botBlacklistQQ",
+          label: "机器人QQ黑名单",
+          bottomHelpMessage: "这些QQ号的机器人不会使用AI响应消息, 白名单优先",
+          component: "GTags",
+          componentProps: {
+            allowAdd: true,
+            allowDel: true,
+            valueFormatter: ((value) => Number.parseInt(value)).toString()
+          }
+        },
         {
           field: "pseudoWhitelistQQ",
           label: "伪人QQ白名单",
@@ -248,4 +180,90 @@ export function supportGuoba() {
       },
     },
   }
+}
+
+function basicCfg() {
+  return [{
+    field: 'aiName',
+    label: 'AI 名称',
+    bottomHelpMessage: '提到此名称会触发 AI 回复',
+    component: "Input",
+    componentProps: {
+      placeholder: "猫娘"
+    }
+  }, {
+    field: 'temperature',
+    label: '温度设置 (主动)',
+    bottomHelpMessage: '控制主动回复的随机性 (0.1 ~ 2.0)',
+    component: "InputNumber",
+    componentProps: {
+      min: 0.1,
+      max: 2,
+      step: 0.1,
+      placeholder: "0.7"
+    }
+  }, {
+    field: 'maxTokens',
+    label: '最大Token数 (主动)',
+    bottomHelpMessage: '控制主动回复的最大长度',
+    component: "InputNumber",
+    componentProps: {
+      min: 100,
+      max: 32768,
+      placeholder: "4096"
+    }
+  }, {
+    field: 'prompt',
+    label: 'Prompt 设置',
+    bottomHelpMessage: '系统 Prompt 设置，定义 AI 的行为和角色',
+    component: "InputTextArea",
+    componentProps: {
+      placeholder: "你是一个猫娘..."
+    }
+  }, {
+    field: 'enableName',
+    label: '启用名字触发',
+    bottomHelpMessage: '检测消息包含ai名字则回复',
+    component: "Switch"
+  }, {
+    field: 'enableAt',
+    label: '启用艾特回复',
+    bottomHelpMessage: '是否在被艾特时回复',
+    component: "Switch"
+  }, {
+    field: 'enablePrivate',
+    label: '启用私聊',
+    bottomHelpMessage: '是否允许在私聊中使用',
+    component: "Switch"
+  }, {
+    field: 'historyCount',
+    label: '聊天记录条数',
+    bottomHelpMessage: '对话时附加的最近聊天记录条数 (0 ~ 50)',
+    component: "InputNumber",
+    componentProps: {
+      min: 0,
+      max: 50,
+      placeholder: "10"
+    }
+  }, {
+    field: 'cacheExpireMinutes',
+    label: '缓存过期时间(分钟)',
+    bottomHelpMessage: '对话缓存过期时间 (1 ~ 1440)',
+    component: "InputNumber",
+    componentProps: {
+      min: 1,
+      max: 1440,
+      placeholder: "30"
+    }
+  }, {
+    field: 'maxContextLength',
+    label: '最大上下文长度',
+    bottomHelpMessage: '缓存中最多保留的对话消息数量 (1 ~ 50)',
+    component: "InputNumber",
+    componentProps: {
+      min: 1,
+      max: 50,
+      placeholder: "10"
+    }
+  }]
 }
