@@ -61,8 +61,8 @@ export default class chat extends plugin {
       return false
     }
 
-    const botWhitelist = Cfg.get('botWhitelistQQ', []) || []
-    const botBlacklist = Cfg.get('botBlacklistQQ', []) || []
+    const botWhitelist = Cfg.get('botWhitelistQQ', [], e) || []
+    const botBlacklist = Cfg.get('botBlacklistQQ', [], e) || []
 
     if (botWhitelist.length > 0 && !botWhitelist.includes(e.self_id)) {
       return false
@@ -73,11 +73,11 @@ export default class chat extends plugin {
     }
 
     if (!e.isGroup) {
-      if (!Cfg.get('enablePrivate', false)) {
+      if (!Cfg.get('enablePrivate', false, e)) {
         return false
       }
-      const whitelistQQ = Cfg.get('pseudoWhitelistQQ', []) || []
-      const blacklistQQ = Cfg.get('pseudoBlacklistQQ', []) || []
+      const whitelistQQ = Cfg.get('pseudoWhitelistQQ', [], e) || []
+      const blacklistQQ = Cfg.get('pseudoBlacklistQQ', [], e) || []
 
       if (whitelistQQ.length > 0 && !whitelistQQ.includes(e.user_id)) {
         logger.debug(`[${pluginName}] 私聊用户 ${e.user_id} 不在QQ白名单中，跳过`)
@@ -94,7 +94,7 @@ export default class chat extends plugin {
 
     const isAtMe = e.atme || e.message?.some(item => item.type === 'at' && item.qq == e.self_id)
 
-    if (isAtMe && Cfg.get('enableAt', true)) {
+    if (isAtMe && Cfg.get('enableAt', true, e)) {
       let content = e.msg
       content = content.replace(new RegExp(`^@${e.bot.info.nickname}\\s*`, 'i'), '').trim()
       if (!content && e.message) {
@@ -111,16 +111,16 @@ export default class chat extends plugin {
     if (!this.shouldTriggerPseudo(e)) {
       return false
     }
-    const aiName = Cfg.get('aiName', '猫娘')
+    const aiName = Cfg.get('aiName', '猫娘', e)
     const containsAiName = e.msg.includes(aiName)
-    if (containsAiName && Cfg.get('enableName', true)) {
+    if (containsAiName && Cfg.get('enableName', true, e)) {
       logger.info(`[${pluginName}] 检测到AI昵称，尝试伪人回复: 群(${e.group_id}), 用户(${e.user_id})`)
       return this.processChat(e, e.msg, 'pseudo')
     }
 
-    if (Cfg.get('enablePseudoHuman', true)) {
+    if (Cfg.get('enablePseudoHuman', true, e)) {
 
-      const probability = Cfg.get('pseudoHumanProbability', 5)
+      const probability = Cfg.get('pseudoHumanProbability', 5, e)
       if (Math.random() * 100 < probability) {
         logger.info(`[${pluginName}] 概率触发伪人模式: 群(${e.group_id}), 用户(${e.user_id})`)
         return this.processChat(e, e.msg, 'pseudo')
@@ -134,10 +134,10 @@ export default class chat extends plugin {
     const userId = e.user_id
     const groupId = e.group_id
 
-    const whitelistQQ = Cfg.get('pseudoWhitelistQQ', []) || []
-    const blacklistQQ = Cfg.get('pseudoBlacklistQQ', []) || []
-    const whitelistGroup = Cfg.get('pseudoWhitelistGroup', []) || []
-    const blacklistGroup = Cfg.get('pseudoBlacklistGroup', []) || []
+    const whitelistQQ = Cfg.get('pseudoWhitelistQQ', [], e) || []
+    const blacklistQQ = Cfg.get('pseudoBlacklistQQ', [], e) || []
+    const whitelistGroup = Cfg.get('pseudoWhitelistGroup', [], e) || []
+    const blacklistGroup = Cfg.get('pseudoBlacklistGroup', [], e) || []
 
     if (whitelistQQ.length > 0 && !whitelistQQ.includes(userId)) {
       logger.debug(`[${pluginName}] 用户 ${userId} 不在伪人QQ白名单中`)
@@ -204,14 +204,14 @@ export default class chat extends plugin {
 
       const requestOptions = {
         messages: messages,
-        model: Cfg.get('model', 'gpt-3.5-turbo'),
-        temperature: Cfg.get('temperature', 0.7),
-        max_tokens: Cfg.get('maxTokens', 1000)
+        model: Cfg.get('model', 'gpt-3.5-turbo', e),
+        temperature: Cfg.get('temperature', 0.7, e),
+        max_tokens: Cfg.get('maxTokens', 1000, e)
       }
 
       if (interactionType === 'pseudo') {
-        requestOptions.max_tokens = Cfg.get('pseudoMaxTokens', 256)
-        requestOptions.temperature = Cfg.get('pseudoTemperature', 0.85)
+        requestOptions.max_tokens = Cfg.get('pseudoMaxTokens', 256, e)
+        requestOptions.temperature = Cfg.get('pseudoTemperature', 0.85, e)
       }
 
       const response = await OpenAI.chat(requestOptions)
@@ -230,7 +230,7 @@ export default class chat extends plugin {
           role: 'assistant',
           content: response
         })
-        this.updateCache(cacheKey, messages)
+        this.updateCache(e, cacheKey, messages)
       }
 
       const msgs = split(response)
@@ -259,9 +259,9 @@ export default class chat extends plugin {
     return `${this.redisKeyPrefix}${e.isGroup ? `group:${e.group_id}` : `private:${e.user_id}`}`
   }
 
-  async updateCache(key, messages) {
-    const cacheExpire = Cfg.get('cacheExpireMinutes', 30) * 60
-    const maxContextLength = Cfg.get('maxContextLength', 10)
+  async updateCache(e, key, messages) {
+    const cacheExpire = Cfg.get('cacheExpireMinutes', 30, e) * 60
+    const maxContextLength = Cfg.get('maxContextLength', 10, e)
 
     let systemMessages = []
     let chatMessages = []
@@ -295,7 +295,7 @@ export default class chat extends plugin {
   }
 
   async getChatHistory(e) {
-    const historyCount = Cfg.get('historyCount', 10)
+    const historyCount = Cfg.get('historyCount', 10, e)
     let history = []
 
     if (historyCount <= 0) {
@@ -344,8 +344,8 @@ export default class chat extends plugin {
       }
     }
 
-    if (role === 'assistant' && content.startsWith(`${Cfg.get('aiName', 'AI助手')}: `)) {
-      content = content.substring(`${Cfg.get('aiName', 'AI助手')}: `.length).trim()
+    if (role === 'assistant' && content.startsWith(`${Cfg.get('aiName', 'AI助手', e)}: `)) {
+      content = content.substring(`${Cfg.get('aiName', 'AI助手', e)}: `.length).trim()
     }
 
     if (!content) return null
@@ -358,7 +358,7 @@ export default class chat extends plugin {
 
   buildInitialMessages(e, interactionType) {
     let messages = []
-    const systemPrompt = Cfg.get('prompt', '')
+    const systemPrompt = Cfg.get('prompt', '', e)
     /*
     分两段system prompt可能导致部分ai不读第一个
     if (systemPrompt) {
@@ -411,7 +411,7 @@ export default class chat extends plugin {
   }
 
   getContextInfo(e, interactionType) {
-    const aiName = Cfg.get('aiName', 'AI助手')
+    const aiName = Cfg.get('aiName', 'AI助手', e)
     let baseInfo = `机器人名字: ${e.bot.info.nickname}\n你的名字: ${aiName}\n`
     let specificInfo = ''
     let styleGuidance = ''
