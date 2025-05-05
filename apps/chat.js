@@ -412,7 +412,7 @@ export default class chat extends plugin {
 
   getContextInfo(e, interactionType) {
     const aiName = Cfg.get('aiName', 'AI助手', e)
-    let baseInfo = `机器人名字: ${e.bot.?info?.nickname}\n你的名字: ${aiName}\n`
+    let baseInfo = `机器人名字: ${e.bot?.info?.nickname}\n你的名字: ${aiName}\n`
     let specificInfo = ''
     let styleGuidance = ''
 
