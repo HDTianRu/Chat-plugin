@@ -96,7 +96,7 @@ export default class chat extends plugin {
 
     if (isAtMe && Cfg.get('enableAt', true, e)) {
       let content = e.msg
-      content = content.replace(new RegExp(`^@${e.bot.info.nickname}\\s*`, 'i'), '').trim()
+      content = content.replace(new RegExp(`^@${e.bot?.info?.nickname}\\s*`, 'i'), '').trim()
       if (!content && e.message) {
         content = e.message.filter(seg => seg.type === 'text').map(seg => seg.text).join('').trim()
       }
@@ -340,7 +340,7 @@ export default class chat extends plugin {
         const titleInfo = sender.title ? `[${sender.title}]` : ''
         senderPrefix = `${roleInfo}${titleInfo} | ${sender.card || sender.nickname}: `
       } else if (!groupId && msg.sender) {
-        senderPrefix = `${msg.sender.nickname}: `
+        senderPrefix = `${msg.sender?.nickname}: `
       }
     }
 
@@ -382,7 +382,7 @@ export default class chat extends plugin {
       const titleInfo = sender.title ? `[${sender.title}]` : ''
       userMessageContent = `${roleInfo}${titleInfo} | ${sender.card || sender.nickname}: ${content}`
     } else {
-      userMessageContent = `${e.sender.nickname}: ${content}`
+      userMessageContent = `${e.sender?.nickname}: ${content}`
     }
     return userMessageContent
   }
@@ -412,7 +412,7 @@ export default class chat extends plugin {
 
   getContextInfo(e, interactionType) {
     const aiName = Cfg.get('aiName', 'AI助手', e)
-    let baseInfo = `机器人名字: ${e.bot.info.nickname}\n你的名字: ${aiName}\n`
+    let baseInfo = `机器人名字: ${e.bot.?info?.nickname}\n你的名字: ${aiName}\n`
     let specificInfo = ''
     let styleGuidance = ''
 
@@ -424,7 +424,7 @@ export default class chat extends plugin {
         styleGuidance = `你正在群聊中被直接提问或互动(用户使用了#chat或@你)。你需要像一个乐于助人的群友一样，清晰、自然地回复。请结合上下文和聊天记录进行回应。优先使用中文。避免使用 "${aiName}: " 开头。`
       }
     } else {
-      specificInfo = `当前在私聊中。\n用户: ${e.sender.nickname}\n用户QQ: ${e.user_id}\n`
+      specificInfo = `当前在私聊中。\n用户: ${e.sender?.nickname}\n用户QQ: ${e.user_id}\n`
       styleGuidance = `你正在以伪人模式私聊。你需要像一个群友一样自然地回复用户。结合用户的发言和聊天记录作出回应。优先使用中文进行对话。避免使用 "${aiName}: " 开头。`
     }
 
