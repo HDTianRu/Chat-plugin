@@ -38,15 +38,17 @@ const watcher = (type) => (type === 'change') ? setTimeout(loadConfig, 1000) : n
 
 fs.watch(join(_cfgPath, "cfg_default.json"), watcher)
 
-fs.watch(join(_cfgPath, "cfg.json"), watcher)
+if (fs.existsSync(join(_cfgPath, "cfg.json"))) {
+  fs.watch(join(_cfgPath, "cfg.json"), watcher)
+}
 
 const Cfg = {
   get(rote, def, e) {
     if (!e?.group_id || !cfg.special) return lodash.get(cfg, rote, def)
-    const special = lodash.get(cfg, `special.${e.self_id}:${e.group_id}`)
-      ?? lodash.get(cfg, `special.*:${e.group_id}`)
-      ?? lodash.get(cfg, `special.${e.self_id}:*`)
-      ?? {}
+    const special = lodash.get(cfg, `special.${e.self_id}:${e.group_id}`) ??
+      lodash.get(cfg, `special.*:${e.group_id}`) ??
+      lodash.get(cfg, `special.${e.self_id}:*`) ??
+      {}
     return lodash.get(special, rote) ?? lodash.get(cfg, rote, def)
   },
   set(rote, val) {
