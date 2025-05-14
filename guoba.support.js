@@ -50,17 +50,17 @@ export function supportGuoba() {
         {
           field: 'special',
           label: 'BOT:群聊特定配置',
-          bottomHelpMessage: '为特定BOT/群聊设置独立的配置参数，格式为 BOT账号:群号 ，如只指定一项，另一项则用 * 代替，比如: 3291691454:* ，优先级: BOT:群 > *:群 > BOT:* > 通用配置',
+          bottomHelpMessage: '为特定BOT/群聊设置独立的配置参数，格式为 BOT账号:群号 ，如只指定一项，另一项则用 * 代替，比如: 12345:* ，优先级: BOT:群 > *:群 > BOT:* > 通用配置',
           component: 'GSubForm',
           componentProps: {
             multiple: true,
             schemas: [{
                 field: 'key',
-                label: 'BOT:群号',
+                label: 'BOT:群号 (格式 BOT:群 或 *:群 或 BOT:*)', // 强调key的格式
                 component: "Input",
                 required: true
               },
-              ...basicCfg()
+              ...basicCfg() // 确保basicCfg()返回的配置项不包含 'key'
             ],
           }
         },
@@ -170,16 +170,38 @@ export function supportGuoba() {
         },
       ],
       getConfigData() {
-        return Cfg.getAll()
+        const allCfg = Cfg.getAll();
+        // 将对象形式的 special 转换回 GSubForm 期望的数组形式
+        if (allCfg.special && typeof allCfg.special === 'object' && !Array.isArray(allCfg.special)) {
+          allCfg.special = Object.entries(allCfg.special).map(([key, value]) => {
+            return { key, ...value };
+          });
+        } else if (!allCfg.special) {
+          allCfg.special = []; // 如果不存在，确保是空数组
+        }
+        return allCfg;
       },
       setConfigData(data, {
         Result
       }) {
-        for (let [keyPath, value] of Object.entries(data)) {
-          Cfg._set(keyPath, value)
+        // 当保存时，如果 special 是数组（来自GSubForm），将其转换回对象形式
+        // 以便 Cfg.js 中的 loadConfig 和 get 方法能够正确处理
+        if (data.special && Array.isArray(data.special)) {
+          const specialObject = {};
+          data.special.forEach(item => {
+            if (item.key) { // 确保有key
+              const { key, ...rest } = item;
+              specialObject[key] = rest;
+            }
+          });
+          data.special = specialObject;
         }
-        Cfg.save()
-        return Result.ok({}, '保存成功喵~')
+
+        for (let [keyPath, value] of Object.entries(data)) {
+          Cfg._set(keyPath, value);
+        }
+        Cfg.save();
+        return Result.ok({}, '保存成功喵~');
       },
     },
   }
