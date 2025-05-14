@@ -23,7 +23,7 @@ const loadConfig = () => {
   }
   cfg = lodash.merge({}, defCfg, userCfg)
   if (cfg.special?.[0]) {
-    cfg.special = Object.fromEntries(
+    cfg.override = Object.fromEntries(
       cfg.special.map(({
         key,
         ...rest
@@ -45,10 +45,9 @@ if (fs.existsSync(join(_cfgPath, "cfg.json"))) {
 const Cfg = {
   get(rote, def, e) {
     if (!e?.group_id || !cfg.special) return lodash.get(cfg, rote, def)
-    const special = lodash.get(cfg, `special.${e.self_id}:${e.group_id}`) ??
-      lodash.get(cfg, `special.*:${e.group_id}`) ??
-      lodash.get(cfg, `special.${e.self_id}:*`) ??
-      {}
+    const special = lodash.get(cfg, `override.${e.self_id}:${e.group_id}`) ??
+      lodash.get(cfg, `override.*:${e.group_id}`) ??
+      lodash.get(cfg, `override.${e.self_id}:*`) ?? {}
     return lodash.get(special, rote) ?? lodash.get(cfg, rote, def)
   },
   set(rote, val) {
