@@ -59,7 +59,7 @@ const Cfg = {
   },
   save() {
     try {
-      fs.writeFileSync(join(_cfgPath, "cfg.json"), JSON.stringify(getAll(), null, "\t"))
+      fs.writeFileSync(join(_cfgPath, "cfg.json"), JSON.stringify(Cfg.getAll(), null, "\t"))
     } catch (e) {
       logger.warn("保存配置文件失败", e)
     }

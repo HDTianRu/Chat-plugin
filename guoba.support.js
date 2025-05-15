@@ -25,20 +25,23 @@ export function supportGuoba() {
           bottomHelpMessage: '填写 OpenAI 兼容 API 的基础地址',
           component: "Input",
           componentProps: {
-            placeholder: "https://api.openai.com/v1"
+            placeholder: "https://api.deepseek.com/v1"
           }
         }, {
           field: 'apiKey',
           label: 'API Key',
           bottomHelpMessage: '填写 API 的密钥',
-          component: "InputPassword"
+          component: "InputPassword",
+          componentProps: {
+            placeholder: "sk-******"
+          }
         }, {
           field: 'model',
           label: 'AI 模型',
           bottomHelpMessage: '使用的 AI 模型名称',
           component: "Input",
           componentProps: {
-            placeholder: "gpt-3.5-turbo"
+            placeholder: "deepseek-chat"
           }
         },
 
