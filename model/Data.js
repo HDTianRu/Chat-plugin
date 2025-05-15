@@ -46,7 +46,7 @@ let Data = {
     try {
       return fs.readFileSync(filePath, 'utf8')
     } catch (e) {
-      console.log(e)
+      logger.warn(e)
     }
   },
 
@@ -65,7 +65,7 @@ let Data = {
       let fileContent = Data.read(`${file}.json`, root) || "{}"
       return JSON.parse(fileContent)
     } catch (e) {
-      console.log(e)
+      logger.warn(e)
     }
     return {}
   },
@@ -84,7 +84,7 @@ let Data = {
         return JSON.parse(txt)
       }
     } catch (e) {
-      console.log(e)
+      logger.warn(e)
     }
     return {}
   },
@@ -106,7 +106,7 @@ let Data = {
         let data = await import(`file://${filePath}?t=${new Date() * 1}`)
         return data || {}
       } catch (e) {
-        console.log(e)
+        logger.warn(e)
       }
     }
     return {}

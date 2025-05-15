@@ -19,7 +19,7 @@ const loadConfig = () => {
       userCfg = JSON.parse(fs.readFileSync(join(_cfgPath, "cfg.json"), "utf8")) || {}
     }
   } catch (e) {
-    console.warn("读取配置文件失败", e)
+    logger.warn("读取配置文件失败", e)
   }
   cfg = lodash.merge({}, defCfg, userCfg)
   if (cfg.special?.[0]) {
@@ -45,10 +45,10 @@ if (fs.existsSync(join(_cfgPath, "cfg.json"))) {
 const Cfg = {
   get(rote, def, e) {
     if (!e?.group_id || !cfg.special) return lodash.get(cfg, rote, def)
-    const special = lodash.get(cfg, `override.${e.self_id}:${e.group_id}`) ??
+    const override = lodash.get(cfg, `override.${e.self_id}:${e.group_id}`) ??
       lodash.get(cfg, `override.*:${e.group_id}`) ??
       lodash.get(cfg, `override.${e.self_id}:*`) ?? {}
-    return lodash.get(special, rote) ?? lodash.get(cfg, rote, def)
+    return lodash.get(override, rote) ?? lodash.get(cfg, rote, def)
   },
   set(rote, val) {
     Cfg._set(rote, val)
@@ -59,13 +59,15 @@ const Cfg = {
   },
   save() {
     try {
-      fs.writeFileSync(join(_cfgPath, "cfg.json"), JSON.stringify(cfg, null, "\t"))
+      fs.writeFileSync(join(_cfgPath, "cfg.json"), JSON.stringify(getAll(), null, "\t"))
     } catch (e) {
-      console.warn("保存配置文件失败", e)
+      logger.warn("保存配置文件失败", e)
     }
   },
   getAll() {
-    return lodash.cloneDeep(cfg)
+    let data = lodash.cloneDeep(cfg)
+    delete data["override"]
+    return data
   },
 }
 
