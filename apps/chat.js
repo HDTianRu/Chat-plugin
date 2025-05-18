@@ -57,7 +57,7 @@ export default class chat extends plugin {
   }
 
   async listen(e) {
-    if (!e.msg || typeof e.msg !== 'string' || !e.msg.trim() || e.msg.startsWith('#')) {
+    if (!e.msg || typeof e.msg !== 'string' || !e.msg.trim() || e.msg.startsWith('#') || e.user_id == e.self_id) {
       return false
     }
 
