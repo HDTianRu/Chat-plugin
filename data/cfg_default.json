@@ -15,5 +15,6 @@
 	"pseudoTemperature": 1.5,
 	"pseudoMaxTokens": 128,
 	"enableName": true,
-	"enableAt": true
+	"enableAt": true,
+	"thinking": true
 }
