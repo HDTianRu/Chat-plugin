@@ -16,5 +16,5 @@
 	"pseudoMaxTokens": 128,
 	"enableName": true,
 	"enableAt": true,
-	"thinking": true
+	"thinking": false
 }

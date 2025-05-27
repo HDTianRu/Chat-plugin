@@ -63,7 +63,7 @@ export default class chat extends plugin {
 
     const botWhitelist = Cfg.get('botWhitelistQQ', [], e) || []
     const botBlacklist = Cfg.get('botBlacklistQQ', [], e) || []
-    const thinking = Cfg.get('thinking', true, e)
+    const thinking = Cfg.get('thinking', false, e)
 
     if (botWhitelist.length > 0 && !botWhitelist.includes(e.self_id)) {
       return false
