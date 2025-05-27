@@ -242,6 +242,11 @@ function basicCfg() {
     bottomHelpMessage: '是否允许在私聊中使用',
     component: "Switch"
   }, {
+    field: 'thinking',
+    label: '提示正在思考中',
+    bottomHelpMessage: '主动模式先回一句正在思考中',
+    component: "Switch"
+  }, {
     field: 'historyCount',
     label: '聊天记录条数',
     bottomHelpMessage: '对话时附加的最近聊天记录条数 (0 ~ 50)',

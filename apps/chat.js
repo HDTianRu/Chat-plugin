@@ -63,6 +63,7 @@ export default class chat extends plugin {
 
     const botWhitelist = Cfg.get('botWhitelistQQ', [], e) || []
     const botBlacklist = Cfg.get('botBlacklistQQ', [], e) || []
+    const thinking = Cfg.get('thinking', true, e)
 
     if (botWhitelist.length > 0 && !botWhitelist.includes(e.self_id)) {
       return false
@@ -88,7 +89,7 @@ export default class chat extends plugin {
         return false
       }
 
-      recall(e, e.reply('我正在思考如何回复你，请稍候', true), 30)
+      if (thinking) recall(e, e.reply('我正在思考如何回复你，请稍候', true), 30)
       return this.processChat(e, e.msg, 'active')
     }
 
@@ -104,7 +105,7 @@ export default class chat extends plugin {
         logger.debug(`[${pluginName}] 忽略纯艾特消息`)
         return false
       }
-      recall(e, e.reply('我正在思考如何回复你，请稍候', true), 30)
+      if (thinking) recall(e, e.reply('我正在思考如何回复你，请稍候', true), 30)
       return this.processChat(e, content, 'active')
     }
 
