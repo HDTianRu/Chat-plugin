@@ -368,7 +368,7 @@ export default class chat extends plugin {
     */
     messages.push({
       role: 'system',
-      content: this.getContextInfo(e, interactionType) + (!!systemPrompt ? `\n\n以下为人设prompt:\n${systemPrompt}` : '')
+      content: this.getContextInfo(e, interactionType) + (!!systemPrompt ? `\n\n以下为你的人设prompt:\n${systemPrompt}` : '')
     })
     return messages
   }
@@ -420,13 +420,13 @@ export default class chat extends plugin {
     if (e.isGroup) {
       specificInfo = `当前在群聊中。\n群号: ${e.group_id}\n群名: ${e.group_name}\n`
       if (interactionType === 'pseudo') {
-        styleGuidance = `你正在以伪人模式参与群聊。你的回复应该非常简短、随意、口语化，模仿群友的风格。可以发表情、复读、或者简短附和。避免表现得像一个AI助手。避免使用 "${aiName}: " 开头。`
+        styleGuidance = `你正在以伪人模式参与群聊。你的回复应该非常简短、随意、口语化，模仿群友的风格。可以发表情、复读、或者简短附和。避免表现得像一个AI助手。**避免**使用 "${aiName}: " 或 "历史聊天记录" 开头。`
       } else {
-        styleGuidance = `你正在群聊中被直接提问或互动(用户使用了#chat或@你)。你需要像一个乐于助人的群友一样，清晰、自然地回复。请结合上下文和聊天记录进行回应。优先使用中文。避免使用 "${aiName}: " 开头。`
+        styleGuidance = `你正在群聊中被直接提问或互动(用户使用了#chat或@你)。你需要像一个乐于助人的群友一样，清晰、自然地回复。请结合上下文和聊天记录进行回应。优先使用中文。**避免**使用 "${aiName}: " 或 "历史聊天记录" 开头。`
       }
     } else {
       specificInfo = `当前在私聊中。\n用户: ${e.sender?.nickname}\n用户QQ: ${e.user_id}\n`
-      styleGuidance = `你正在以伪人模式私聊。你需要像一个群友一样自然地回复用户。结合用户的发言和聊天记录作出回应。优先使用中文进行对话。避免使用 "${aiName}: " 开头。`
+      styleGuidance = `你正在以伪人模式私聊。你需要像一个群友一样自然地回复用户。结合用户的发言和聊天记录作出回应。优先使用中文进行对话。**避免**使用 "${aiName}: " 或 "历史聊天记录" 开头。`
     }
 
     return baseInfo + specificInfo + styleGuidance
