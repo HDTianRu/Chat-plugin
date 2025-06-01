@@ -247,6 +247,11 @@ function basicCfg() {
     bottomHelpMessage: '主动模式先回一句正在思考中',
     component: "Switch"
   }, {
+    field: 'delay',
+    label: '伪人随机延迟',
+    bottomHelpMessage: '格式: 下限-上限 (单位ms)，如 500-1000',
+    component: "Input"
+  }, {
     field: 'historyCount',
     label: '聊天记录条数',
     bottomHelpMessage: '对话时附加的最近聊天记录条数 (0 ~ 50)',

@@ -18,6 +18,10 @@ const recall = async (e, promise, time) => {
       e.friend.recallMsg(res.message_id), time * 1000)
 }
 
+const sleep = async (time) => {
+  return new Promise(e => setTimeout(e, time))
+}
+
 export default class chat extends plugin {
   constructor(e) {
     super({
@@ -124,6 +128,11 @@ export default class chat extends plugin {
       const probability = Cfg.get('pseudoHumanProbability', 5, e)
       if (Math.random() * 100 < probability) {
         logger.info(`[${pluginName}] 概率触发伪人模式: 群(${e.group_id}), 用户(${e.user_id})`)
+        const delay = Cfg.get('delay', true, e).split('-')
+        if (delay.length === 2) {
+          const time = Math.random() * (delay[1] - delay[0]) + delay[0]
+          await sleep(time)
+        }
         return this.processChat(e, e.msg, 'pseudo')
       }
     }
@@ -420,13 +429,13 @@ export default class chat extends plugin {
     if (e.isGroup) {
       specificInfo = `当前在群聊中。\n群号: ${e.group_id}\n群名: ${e.group_name}\n`
       if (interactionType === 'pseudo') {
-        styleGuidance = `你正在以伪人模式参与群聊。你的回复应该非常简短、随意、口语化，模仿群友的风格。可以发表情、复读、或者简短附和。避免表现得像一个AI助手。**避免**使用 "${aiName}: " 或 "历史聊天记录" 开头。`
+        styleGuidance = `你正在以伪人模式参与群聊。你的回复应该非常简短、随意、口语化，模仿群友的风格。可以发表情、复读、或者简短附和。避免表现得像一个AI助手。**避免**使用 "${aiName}: " 或 "历史聊天记录" 等各种\`|\`之前的聊天记录格式开头。`
       } else {
-        styleGuidance = `你正在群聊中被直接提问或互动(用户使用了#chat或@你)。你需要像一个乐于助人的群友一样，清晰、自然地回复。请结合上下文和聊天记录进行回应。优先使用中文。**避免**使用 "${aiName}: " 或 "历史聊天记录" 开头。`
+        styleGuidance = `你正在群聊中被直接提问或互动(用户使用了#chat或@你)。你需要像一个乐于助人的群友一样，清晰、自然地回复。请结合上下文和聊天记录进行回应。优先使用中文。**避免**使用 "${aiName}: " 或 "历史聊天记录" 等各种\`|\`之前的聊天记录格式开头。`
       }
     } else {
       specificInfo = `当前在私聊中。\n用户: ${e.sender?.nickname}\n用户QQ: ${e.user_id}\n`
-      styleGuidance = `你正在以伪人模式私聊。你需要像一个群友一样自然地回复用户。结合用户的发言和聊天记录作出回应。优先使用中文进行对话。**避免**使用 "${aiName}: " 或 "历史聊天记录" 开头。`
+      styleGuidance = `你正在以伪人模式私聊。你需要像一个群友一样自然地回复用户。结合用户的发言和聊天记录作出回应。优先使用中文进行对话。**避免**使用 "${aiName}: " 或 "历史聊天记录" 等各种\`|\`之前的聊天记录格式开头。`
     }
 
     return baseInfo + specificInfo + styleGuidance
