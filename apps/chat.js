@@ -128,7 +128,7 @@ export default class chat extends plugin {
       const probability = Cfg.get('pseudoHumanProbability', 5, e)
       if (Math.random() * 100 < probability) {
         logger.info(`[${pluginName}] 概率触发伪人模式: 群(${e.group_id}), 用户(${e.user_id})`)
-        const delay = Cfg.get('delay', true, e).split('-')
+        const delay = Cfg.get('delay', "", e).split('-')
         if (delay.length === 2) {
           const time = Math.random() * (delay[1] - delay[0]) + delay[0]
           await sleep(time)
