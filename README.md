@@ -14,6 +14,9 @@ cd ..
 pnpm install
 ```
 
+## 指令
+**详见 *#chathelp***
+
 ## 其他
 交流群：[893157055](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=BWtOJkAHVX20OlQqgAIPn7UID9LtigSg&group_code=893157055)  
 有问题提issue  
