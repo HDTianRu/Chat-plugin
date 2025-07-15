@@ -10,10 +10,11 @@ class OpenAIClient {
   }
 
   initClient() {
-    const apiKey = Cfg.get('apiKey', '')
-    const baseURL = Cfg.get('apiUrl', 'https://api.openai.com/v1')
+    const apiKeys = Cfg.get('apiKey', '').replace("，", ",").split(",").map(i => i.trim())
+    const baseURL = Cfg.get('apiUrl', 'https://api.deepseek.com/v1')
 
-    if (apiKey) {
+    if (apiKeys.length >= 1) {
+      const apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)]
       try {
         return new OpenAI({
           apiKey: apiKey,
