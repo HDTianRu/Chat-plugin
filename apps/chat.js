@@ -244,10 +244,10 @@ export default class chat extends plugin {
       }
 
       const msgs = split(response)
-      if (interactionType === 'active' || msgs.length === 1) {
+      /*if (interactionType === 'active' || msgs.length === 1) {
         e.reply(response.trim())
         return true
-      }
+      }*/
 
       const sleep = (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms))
