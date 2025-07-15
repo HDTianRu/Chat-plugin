@@ -80,7 +80,7 @@
 }*/
 
 export const split = (text) => {
-  const reg = /[。！？\!\?\n](?![。！？\!\?\n])/
+  const reg = /[。？\?\n](?![。！？\!\?\n])/
   const ret = text.split(reg).map(i => i.trim()).filter(Boolean)
   if (text.length >= 500 || ret.length > 5)
     return [text]
