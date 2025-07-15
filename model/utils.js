@@ -1,5 +1,5 @@
 //Powered by Cluade
-export const split = (responseText) => {
+/*export const split = (responseText) => {
   function escapeRegex(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   }
@@ -38,7 +38,7 @@ export const split = (responseText) => {
     return [responseText]
   }
 
-  const splitRegex = /(?<!\?)[。？\n](?!\?)/g
+  const splitRegex = /((?<!\?)[。？\n](?!\?)|\n{2,})/g
   const rawChunks = []
   let lastSplitIndex = 0
   let match
@@ -77,4 +77,13 @@ export const split = (responseText) => {
   }
 
   return ret
+}*/
+
+export const split = (text) => {
+  const reg = /[。！？\!\?\n](?![。！？\!\?\n])/
+  const ret = text.split(reg).map(i => i.trim()).filter(Boolean)
+  if (text.length >= 500 || ret.length > 5)
+    return [text]
+  else
+    return ret
 }
