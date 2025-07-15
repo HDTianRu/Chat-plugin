@@ -1,79 +1,80 @@
 //Powered by Cluade
 export const split = (responseText) => {
   function escapeRegex(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   }
 
   function trimSpecificMarker(str, marker) {
     if (typeof str !== 'string' || typeof marker !== 'string' || !marker) {
-      return str;
+      return str
     }
-    let trimmedStr = str.trim();
-    const escapedMarker = escapeRegex(marker);
-    const regex = new RegExp(`^${escapedMarker}|${escapedMarker}$`, 'g');
-    return trimmedStr.replace(regex, '').trim();
+    let trimmedStr = str.trim()
+    const escapedMarker = escapeRegex(marker)
+    const regex = new RegExp(`^${escapedMarker}|${escapedMarker}$`, 'g')
+    return trimmedStr.replace(regex, '').trim()
   }
 
   function filterResponseChunk(msg) {
     if (typeof msg !== 'string') {
-      return false;
+      return false
     }
-    let trimmedMsg = msg.trim();
+    let trimmedMsg = msg.trim()
     if (!trimmedMsg) {
-      return false;
+      return false
     }
     if (trimmedMsg === '```' || trimmedMsg === '<EMPTY>') {
-      return false;
+      return false
     }
-    trimmedMsg = trimSpecificMarker(trimmedMsg, '<EMPTY>');
-    return trimmedMsg.length > 0 ? trimmedMsg : false;
+    trimmedMsg = trimSpecificMarker(trimmedMsg, '<EMPTY>')
+    return trimmedMsg.length > 0 ? trimmedMsg : false
   }
 
   if (!responseText || typeof responseText !== 'string') {
-    return [];
+    return []
   }
 
-  const MAX_LENGTH = 250;
+  const MAX_LENGTH = 555
   if (responseText.length > MAX_LENGTH) {
-    return [responseText];
+    return [responseText]
   }
 
-  const splitRegex = /(?<!\?)[。？\n](?!\?)/g;
-  const rawChunks = [];
-  let lastSplitIndex = 0;
-  let match;
+  const splitRegex = /(?<!\?)[。？\n](?!\?)/g
+  const rawChunks = []
+  let lastSplitIndex = 0
+  let match
 
   while ((match = splitRegex.exec(responseText)) !== null) {
-    rawChunks.push(responseText.slice(lastSplitIndex, match.index));
-    lastSplitIndex = splitRegex.lastIndex;
+    rawChunks.push(responseText.slice(lastSplitIndex, match.index))
+    lastSplitIndex = splitRegex.lastIndex
   }
-  rawChunks.push(responseText.slice(lastSplitIndex));
+  rawChunks.push(responseText.slice(lastSplitIndex))
 
-  const finalResultChunks = [];
-  let currentSearchIndex = 0;
+  const finalResultChunks = []
+  let currentSearchIndex = 0
 
   for (const rawChunk of rawChunks) {
-    let processedChunk = rawChunk.trim();
-    let chunkEndIndexInOriginal = currentSearchIndex + rawChunk.length;
+    let processedChunk = rawChunk.trim()
+    let chunkEndIndexInOriginal = currentSearchIndex + rawChunk.length
 
     if (processedChunk && chunkEndIndexInOriginal < responseText.length && responseText[chunkEndIndexInOriginal] === '？') {
-      processedChunk += '？';
+      processedChunk += '？'
     }
 
-    const finalChunk = filterResponseChunk(processedChunk);
+    const finalChunk = filterResponseChunk(processedChunk)
     if (finalChunk !== false) {
-      finalResultChunks.push(finalChunk);
+      finalResultChunks.push(finalChunk)
     }
 
-    currentSearchIndex = chunkEndIndexInOriginal + 1;
+    currentSearchIndex = chunkEndIndexInOriginal + 1
     if (currentSearchIndex > responseText.length) {
-      currentSearchIndex = responseText.length;
+      currentSearchIndex = responseText.length
     }
   }
-
-  if (finalResultChunks.length > 3) {
-    return [responseText];
+  
+  const ret = finalResultChunks.map(Boolean)
+  if (ret.length > 5) {
+    return [responseText]
   }
 
-  return finalResultChunks;
+  return ret
 }
