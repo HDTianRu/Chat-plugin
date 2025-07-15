@@ -71,7 +71,7 @@ export const split = (responseText) => {
     }
   }
   
-  const ret = finalResultChunks.map(Boolean)
+  const ret = finalResultChunks.filter(Boolean)
   if (ret.length > 5) {
     return [responseText]
   }
