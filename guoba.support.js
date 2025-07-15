@@ -30,7 +30,7 @@ export function supportGuoba() {
         }, {
           field: 'apiKey',
           label: 'API Key',
-          bottomHelpMessage: '填写 API 的密钥',
+          bottomHelpMessage: '填写 API 的密钥，支持逗号分隔多个key',
           component: "InputPassword",
           componentProps: {
             placeholder: "sk-******"
