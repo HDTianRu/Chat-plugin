@@ -68,48 +68,10 @@ export function supportGuoba() {
           }
         },
 
-        {
+        /*{
           label: '伪人配置',
           component: 'SOFT_GROUP_BEGIN'
-        },
-        {
-          field: 'enablePseudoHuman',
-          label: '启用伪人模式',
-          bottomHelpMessage: '是否在群聊中随机回复消息',
-          component: "Switch"
-        }, {
-          field: 'pseudoHumanProbability',
-          label: '伪人模式概率 (%)',
-          bottomHelpMessage: '伪人模式触发的概率 (1-100)',
-          component: "InputNumber",
-          componentProps: {
-            min: 1,
-            max: 100,
-            placeholder: "5"
-          }
-        },
-        {
-          field: 'pseudoTemperature',
-          label: '温度设置 (伪人)',
-          bottomHelpMessage: '控制伪人模式回复的随机性 (0.1 ~ 2.0)',
-          component: "InputNumber",
-          componentProps: {
-            min: 0.1,
-            max: 2,
-            step: 0.1,
-            placeholder: "0.85"
-          }
-        }, {
-          field: 'pseudoMaxTokens',
-          label: '最大Token数 (伪人)',
-          bottomHelpMessage: '控制伪人模式回复的最大长度',
-          component: "InputNumber",
-          componentProps: {
-            min: 10,
-            max: 1024,
-            placeholder: "128"
-          }
-        },
+        },*/
 
         {
           label: '黑白名单设置',
@@ -190,96 +152,132 @@ export function supportGuoba() {
 
 function basicCfg() {
   return [{
-    field: 'aiName',
-    label: 'AI 名称',
-    bottomHelpMessage: '提到此名称会触发 AI 回复',
-    component: "Input",
-    componentProps: {
-      placeholder: "猫娘"
-    }
-  }, {
-    field: 'temperature',
-    label: '温度设置 (主动)',
-    bottomHelpMessage: '控制主动回复的随机性 (0.1 ~ 2.0)',
-    component: "InputNumber",
-    componentProps: {
-      min: 0.1,
-      max: 2,
-      step: 0.1,
-      placeholder: "0.7"
-    }
-  }, {
-    field: 'maxTokens',
-    label: '最大Token数 (主动)',
-    bottomHelpMessage: '控制主动回复的最大长度',
-    component: "InputNumber",
-    componentProps: {
-      min: 100,
-      max: 32768,
-      placeholder: "4096"
-    }
-  }, {
-    field: 'prompt',
-    label: 'Prompt 设置',
-    bottomHelpMessage: '系统 Prompt 设置，定义 AI 的行为和角色',
-    component: "InputTextArea",
-    componentProps: {
-      placeholder: "你是一个猫娘..."
-    }
-  }, {
-    field: 'enableName',
-    label: '启用名字触发',
-    bottomHelpMessage: '检测消息包含ai名字则回复',
-    component: "Switch"
-  }, {
-    field: 'enableAt',
-    label: '启用艾特回复',
-    bottomHelpMessage: '是否在被艾特时回复',
-    component: "Switch"
-  }, {
-    field: 'enablePrivate',
-    label: '启用私聊',
-    bottomHelpMessage: '是否允许在私聊中使用',
-    component: "Switch"
-  }, {
-    field: 'thinking',
-    label: '提示正在思考中',
-    bottomHelpMessage: '主动模式先回一句正在思考中',
-    component: "Switch"
-  }, {
-    field: 'delay',
-    label: '伪人随机延迟',
-    bottomHelpMessage: '格式: 下限-上限 (单位ms)，如 500-1000',
-    component: "Input"
-  }, {
-    field: 'historyCount',
-    label: '聊天记录条数',
-    bottomHelpMessage: '对话时附加的最近聊天记录条数 (0 ~ 50)',
-    component: "InputNumber",
-    componentProps: {
-      min: 0,
-      max: 50,
-      placeholder: "10"
-    }
-  }, {
-    field: 'cacheExpireMinutes',
-    label: '缓存过期时间(分钟)',
-    bottomHelpMessage: '对话缓存过期时间 (1 ~ 1440)',
-    component: "InputNumber",
-    componentProps: {
-      min: 1,
-      max: 1440,
-      placeholder: "30"
-    }
-  }, {
-    field: 'maxContextLength',
-    label: '最大上下文长度',
-    bottomHelpMessage: '缓存中最多保留的对话消息数量 (1 ~ 50)',
-    component: "InputNumber",
-    componentProps: {
-      min: 1,
-      max: 50,
-      placeholder: "10"
-    }
-  }]
+      field: 'aiName',
+      label: 'AI名称 (支持正则)',
+      bottomHelpMessage: '提到此名称会触发 AI 回复',
+      component: "Input",
+      componentProps: {
+        placeholder: "猫娘"
+      }
+    }, {
+      field: 'temperature',
+      label: '温度设置 (主动)',
+      bottomHelpMessage: '控制主动回复的随机性 (0.1 ~ 2.0)',
+      component: "InputNumber",
+      componentProps: {
+        min: 0.1,
+        max: 2,
+        step: 0.1,
+        placeholder: "0.7"
+      }
+    }, {
+      field: 'maxTokens',
+      label: '最大Token数 (主动)',
+      bottomHelpMessage: '控制主动回复的最大长度',
+      component: "InputNumber",
+      componentProps: {
+        min: 64,
+        max: 65536,
+        placeholder: "4096"
+      }
+    }, {
+      field: 'prompt',
+      label: 'Prompt 设置',
+      bottomHelpMessage: '系统 Prompt 设置，定义 AI 的行为和角色',
+      component: "InputTextArea",
+      componentProps: {
+        placeholder: "你是一个猫娘..."
+      }
+    }, {
+      field: 'enableName',
+      label: '启用名字触发',
+      bottomHelpMessage: '检测消息包含ai名字则回复',
+      component: "Switch"
+    }, {
+      field: 'enableAt',
+      label: '启用艾特回复',
+      bottomHelpMessage: '是否在被艾特时回复',
+      component: "Switch"
+    }, {
+      field: 'enablePrivate',
+      label: '启用私聊',
+      bottomHelpMessage: '是否允许在私聊中使用',
+      component: "Switch"
+    }, {
+      field: 'thinking',
+      label: '提示正在思考中',
+      bottomHelpMessage: '主动模式先回一句正在思考中',
+      component: "Switch"
+    }, {
+      field: 'delay',
+      label: '伪人随机延迟',
+      bottomHelpMessage: '格式: 下限-上限 (单位ms)，如 500-1000',
+      component: "Input"
+    }, {
+      field: 'historyCount',
+      label: '聊天记录条数',
+      bottomHelpMessage: '对话时附加的最近聊天记录条数 (0 ~ 50)',
+      component: "InputNumber",
+      componentProps: {
+        min: 0,
+        max: 50,
+        placeholder: "10"
+      }
+    }, {
+      field: 'cacheExpireMinutes',
+      label: '缓存过期时间(分钟)',
+      bottomHelpMessage: '对话缓存过期时间 (1 ~ 1440)',
+      component: "InputNumber",
+      componentProps: {
+        min: 1,
+        max: 1440,
+        placeholder: "30"
+      }
+    }, {
+      field: 'maxContextLength',
+      label: '最大上下文长度',
+      bottomHelpMessage: '缓存中最多保留的对话消息数量 (1 ~ 50)',
+      component: "InputNumber",
+      componentProps: {
+        min: 1,
+        max: 50,
+        placeholder: "10"
+      }
+    }, {
+      field: 'enablePseudoHuman',
+      label: '启用伪人模式',
+      bottomHelpMessage: '是否在群聊中随机回复消息',
+      component: "Switch"
+    }, {
+      field: 'pseudoHumanProbability',
+      label: '伪人模式概率 (%)',
+      bottomHelpMessage: '伪人模式触发的概率 (1-100)',
+      component: "InputNumber",
+      componentProps: {
+        min: 1,
+        max: 100,
+        placeholder: "5"
+      }
+    }, {
+      field: 'pseudoTemperature',
+      label: '温度设置 (伪人)',
+      bottomHelpMessage: '控制伪人模式回复的随机性 (0.1 ~ 2.0)',
+      component: "InputNumber",
+      componentProps: {
+        min: 0.1,
+        max: 2,
+        step: 0.1,
+        placeholder: "0.85"
+      }
+    }, {
+      field: 'pseudoMaxTokens',
+      label: '最大Token数 (伪人)',
+      bottomHelpMessage: '控制伪人模式回复的最大长度',
+      component: "InputNumber",
+      componentProps: {
+        min: 10,
+        max: 1024,
+        placeholder: "128"
+      }
+    }]
 }
