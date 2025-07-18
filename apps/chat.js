@@ -117,8 +117,8 @@ export default class chat extends plugin {
       return false
     }
     const aiName = Cfg.get('aiName', '猫娘', e)
-    const containsAiName = e.msg.includes(aiName)
-    if (containsAiName && Cfg.get('enableName', true, e)) {
+    const containsAiName = (new RegExp(aiName)).test(e.msg)
+    if (aiName && containsAiName && Cfg.get('enableName', true, e)) {
       logger.info(`[${pluginName}] 检测到AI昵称，尝试伪人回复: 群(${e.group_id}), 用户(${e.user_id})`)
       return this.processChat(e, e.msg, 'pseudo')
     }
