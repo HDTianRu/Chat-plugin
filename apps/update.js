@@ -13,7 +13,7 @@ export class update extends plugin {
     super({
       name: `[${pluginName}]更新`,
       event: "message",
-      priority: 1000,
+      priority: 0,
       rule: [
         {
           reg: `^#*((C|c)hat|${pluginName})(插件)?(强制)?更新|^#*(强制)?更新(推送|${pluginName})(插件)?`,

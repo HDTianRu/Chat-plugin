@@ -20,7 +20,7 @@ export class help extends plugin {
       name: `[${pluginName}]帮助`,
       dsc: '帮助',
       event: 'message',
-      priority: 100,
+      priority: -114514,
       rule: [{
         reg: "^#?((C|c)hat)(-?(P|p)lugin)?(命令|帮助|菜单|help|说明|功能|指令|使用说明)$",
         fnc: 'help'

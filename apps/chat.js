@@ -38,11 +38,6 @@ export default class chat extends plugin {
         {
           reg: '^#结束全部对话$',
           fnc: 'endAllConversations'
-        },
-        {
-          reg: '',
-          fnc: 'listen',
-          log: false
         }
       ]
     })
@@ -60,7 +55,7 @@ export default class chat extends plugin {
     return this.processChat(e, content, 'active')
   }
 
-  async listen(e) {
+  async accept(e) {
     if (!e.msg || typeof e.msg !== 'string' || !e.msg.trim() || e.msg.startsWith('#') || e.user_id == e.self_id) {
       return false
     }
