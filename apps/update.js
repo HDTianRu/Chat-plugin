@@ -16,7 +16,7 @@ export class update extends plugin {
       priority: 0,
       rule: [
         {
-          reg: `^#*((C|c)hat|${pluginName})(插件)?(强制)?更新|^#*(强制)?更新(推送|${pluginName})(插件)?`,
+          reg: `^#*((C|c)hat|${pluginName})(插件)?(强制)?更新|^#*(强制)?更新((C|c)hat|${pluginName})(插件)?`,
           fnc: "update"
         },
         {
