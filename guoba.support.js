@@ -262,10 +262,10 @@ function basicCfg() {
   }, {
     field: 'pseudoHumanProbability',
     label: '伪人模式概率 (%)',
-    bottomHelpMessage: '伪人模式触发的概率 (1-100)',
+    bottomHelpMessage: '伪人模式触发的概率 (0-100)',
     component: "InputNumber",
     componentProps: {
-      min: 1,
+      min: 0,
       max: 100,
       placeholder: "5"
     }
