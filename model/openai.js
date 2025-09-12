@@ -80,8 +80,7 @@ class OpenAIClient {
         })
 
         if (!response || !response.choices || response.choices.length === 0 || !response.choices[0].message) {
-          logger.warn(`[${pluginName}] OpenAI API 返回无效或空响应。`)
-          return null
+          throw new Error(`[${pluginName}] OpenAI API 返回无效或空响应`)
         }
 
         return response.choices[0].message.content || ''
