@@ -335,7 +335,7 @@ export default class chat extends plugin {
     const isBot = msg.user_id == e.self_id
     let role = isBot ? 'assistant' : 'user'
     let senderPrefix = ''
-    let content = msg.raw_message.trim()
+    let content = msg.message.map(i => i.type === "text" ? i.text : `[${i.type}]`).join()
 
     if (role === 'user' && content) {
       if (groupId && msg.sender) {
